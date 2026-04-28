@@ -1,0 +1,13 @@
+{
+  "name": "care-bridge-gemma4",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first smart-glasses medical translation and triage demo using Gemma 4, OpenAI Whisper, and ElevenLabs.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
