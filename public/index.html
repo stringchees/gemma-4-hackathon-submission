@@ -2,207 +2,354 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Care Bridge</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">Gemma 4 local-first medical intake</p>
-        <h1>Care Bridge</h1>
-      </div>
-      <nav class="tabs" aria-label="Primary views">
-        <button class="tab is-active" data-view="field">Field App</button>
-        <button class="tab" data-view="clinic">Clinic Dashboard</button>
-        <button class="tab" data-view="architecture">Architecture</button>
-      </nav>
-    </header>
-
-    <main>
-      <section class="view is-active" id="field-view">
-        <div class="field-grid">
-          <section class="panel visit-panel">
-            <div class="panel-header">
-              <div>
-                <p class="eyebrow">Smart glasses session</p>
-                <h2>Live Visit</h2>
-              </div>
-              <div class="status-pill" id="provider-status">Checking providers</div>
-            </div>
-
-            <div class="control-grid">
-              <label>
-                Patient language
-                <select id="source-language">
-                  <option value="Spanish" data-code="es">Spanish</option>
-                  <option value="French" data-code="fr">French</option>
-                  <option value="Hindi" data-code="hi">Hindi</option>
-                  <option value="English" data-code="en">English</option>
-                </select>
-              </label>
-              <label>
-                Aide language
-                <select id="target-language">
-                  <option value="English">English</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="French">French</option>
-                </select>
-              </label>
-            </div>
-
-            <div class="recorder-row">
-              <button class="primary action-button" id="record-button">Start Recording</button>
-              <button class="secondary action-button" id="mock-button">Use Sample Speech</button>
-            </div>
-
-            <label class="text-block-label" for="transcript-input">Transcript</label>
-            <textarea id="transcript-input" rows="5" placeholder="Record audio or type patient speech here..."></textarea>
-
-            <div class="recorder-row">
-              <button class="primary action-button" id="process-button">Translate + Extract</button>
-              <button class="secondary action-button" id="play-translation-button">Play Translation</button>
-            </div>
-
-            <div class="translation-box">
-              <p class="eyebrow">Aide translation</p>
-              <p id="translation-output">No translation yet.</p>
-            </div>
-          </section>
-
-          <section class="panel triage-panel">
-            <div class="panel-header">
-              <div>
-                <p class="eyebrow">AI draft, aide confirmed</p>
-                <h2>Triage Submission</h2>
-              </div>
-              <span class="urgency gray" id="urgency-badge">Gray</span>
-            </div>
-
-            <div class="form-grid">
-              <label>
-                Chief complaint
-                <input id="chief-complaint" type="text" />
-              </label>
-              <label>
-                Review status
-                <select id="review-status">
-                  <option value="ai_draft">AI draft</option>
-                  <option value="aide_confirmed">Aide confirmed</option>
-                  <option value="needs_clinician">Needs clinician</option>
-                </select>
-              </label>
-              <label>
-                Heart rate
-                <input id="heart-rate" type="text" inputmode="numeric" />
-              </label>
-              <label>
-                Blood pressure
-                <input id="blood-pressure" type="text" placeholder="120/80" />
-              </label>
-              <label>
-                Temperature
-                <input id="temperature" type="text" />
-              </label>
-              <label>
-                O2 saturation
-                <input id="oxygen" type="text" />
-              </label>
-            </div>
-
-            <div class="summary-row">
-              <div>
-                <p class="eyebrow">AI summary</p>
-                <p id="ai-summary">Capture speech to generate a triage draft.</p>
-              </div>
-            </div>
-
-            <section class="mini-section">
-              <div class="section-title">
-                <h3>Symptoms</h3>
-                <button class="icon-button" id="add-symptom-button" title="Add symptom">+</button>
-              </div>
-              <div id="symptom-list" class="stack-list"></div>
-            </section>
-
-            <section class="mini-section">
-              <div class="section-title">
-                <h3>Follow-up Questions</h3>
-                <span class="count-pill" id="question-count">0</span>
-              </div>
-              <div id="question-list" class="stack-list"></div>
-            </section>
-
-            <section class="mini-section">
-              <div class="section-title">
-                <h3>Consent and Notes</h3>
-              </div>
-              <label class="checkbox-row">
-                <input id="consent-checkbox" type="checkbox" />
-                Patient consent captured for triage documentation and clinic sync
-              </label>
-              <textarea id="aide-notes" rows="3" placeholder="Aide notes..."></textarea>
-            </section>
-
-            <div class="recorder-row">
-              <button class="primary action-button" id="submit-button">Submit to Clinic</button>
-              <button class="secondary action-button" id="fhir-button">View FHIR</button>
-            </div>
-          </section>
+    <main class="phone-stage">
+      <section class="phone-shell" aria-label="Care Bridge mobile app">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span id="provider-status">Mock mode</span>
         </div>
-      </section>
 
-      <section class="view" id="clinic-view">
-        <div class="dashboard-grid">
-          <section class="panel">
-            <div class="panel-header">
-              <div>
-                <p class="eyebrow">Localhost clinic side</p>
-                <h2>Triage Queue</h2>
-              </div>
-              <button class="secondary action-button" id="refresh-dashboard-button">Refresh</button>
+        <section class="screen is-active" id="login-screen">
+          <div class="brand-mark">+</div>
+          <div class="welcome-copy">
+            <p class="kicker">Care Bridge</p>
+            <h1>Translate care, capture triage.</h1>
+            <p>Smart-glasses intake for clinics that cannot wait on perfect internet.</p>
+          </div>
+
+          <form class="login-form" id="login-form">
+            <label>
+              Aide name
+              <input id="aide-name" autocomplete="name" placeholder="Maya Chen" required />
+            </label>
+            <label>
+              Clinic code
+              <input id="clinic-code" autocomplete="organization" placeholder="RURAL-12" required />
+            </label>
+            <button class="primary-button" type="submit">Log in</button>
+          </form>
+        </section>
+
+        <section class="screen" id="language-screen">
+          <header class="screen-header">
+            <button class="circle-button" data-back-to="login" aria-label="Back">‹</button>
+            <div>
+              <p class="kicker">Step 1</p>
+              <h2>Choose your output language</h2>
             </div>
-            <div id="queue-list" class="queue-list"></div>
+          </header>
+
+          <div class="language-list" id="language-list">
+            <button class="language-card is-selected" data-language="English">
+              <span>English</span>
+            </button>
+            <button class="language-card" data-language="Spanish">
+              <span>Spanish</span>
+            </button>
+            <button class="language-card" data-language="French">
+              <span>French</span>
+            </button>
+            <button class="language-card" data-language="Hindi">
+              <span>Hindi</span>
+            </button>
+            <button class="language-card" data-language="Arabic">
+              <span>Arabic</span>
+            </button>
+            <button class="language-card" data-language="Swahili">
+              <span>Swahili</span>
+            </button>
+            <button class="language-card" data-language="Portuguese">
+              <span>Portuguese</span>
+            </button>
+            <button class="language-card" data-language="Mandarin">
+              <span>Mandarin</span>
+            </button>
+            <button class="language-card" data-language="Ukrainian">
+              <span>Ukrainian</span>
+            </button>
+            <button class="language-card" data-language="Russian">
+              <span>Russian</span>
+            </button>
+            <button class="language-card" data-language="Bengali">
+              <span>Bengali</span>
+            </button>
+            <button class="language-card" data-language="Urdu">
+              <span>Urdu</span>
+            </button>
+            <button class="language-card" data-language="Vietnamese">
+              <span>Vietnamese</span>
+            </button>
+            <button class="language-card" data-language="Tagalog">
+              <span>Tagalog</span>
+            </button>
+            <button class="language-card" data-language="Haitian Creole">
+              <span>Haitian Creole</span>
+            </button>
+            <button class="language-card" data-language="Somali">
+              <span>Somali</span>
+            </button>
+            <button class="language-card" data-language="Amharic">
+              <span>Amharic</span>
+            </button>
+            <button class="language-card" data-language="Korean">
+              <span>Korean</span>
+            </button>
+            <button class="language-card" data-language="Japanese">
+              <span>Japanese</span>
+            </button>
+            <button class="language-card" data-language="German">
+              <span>German</span>
+            </button>
+            <button class="language-card" data-language="Italian">
+              <span>Italian</span>
+            </button>
+          </div>
+
+          <div class="info-strip">
+            <span class="dot"></span>
+            Patient language is detected automatically from speech.
+          </div>
+
+          <button class="primary-button docked" id="start-setup-button">Continue</button>
+        </section>
+
+        <section class="screen" id="setup-screen">
+          <header class="screen-header">
+            <button class="circle-button" data-back-to="language" aria-label="Back">‹</button>
+            <div>
+              <p class="kicker">Step 2</p>
+              <h2>Connect glasses</h2>
+            </div>
+          </header>
+
+          <div class="device-card success">
+            <div>
+              <strong id="bluetooth-status">Glasses not connected</strong>
+              <p>Pair glasses in phone Bluetooth settings for audio. Use BLE here for button/battery signals when available.</p>
+            </div>
+            <button class="secondary-button" id="bluetooth-button">Connect</button>
+          </div>
+
+          <label>
+            Microphone
+            <select id="microphone-select"></select>
+          </label>
+          <label>
+            Speaker
+            <select id="speaker-select"></select>
+          </label>
+
+          <div class="device-card">
+            <div>
+              <strong>Voice activity</strong>
+              <p id="voice-status">Waiting for microphone permission</p>
+            </div>
+            <div class="meter"><span id="voice-meter"></span></div>
+          </div>
+
+          <button class="primary-button docked" id="enter-app-button">Start visit</button>
+        </section>
+
+        <section class="screen app-screen" id="visit-screen">
+          <header class="app-header">
+            <div>
+              <p class="kicker">Live visit</p>
+              <h2 id="visit-title">Ready to listen</h2>
+            </div>
+            <span class="urgency gray" id="urgency-badge">Gray</span>
+          </header>
+
+          <div class="language-row">
+            <div>
+              <small>Detected</small>
+              <strong id="detected-language">Auto</strong>
+            </div>
+            <span>→</span>
+            <div>
+              <small>Output</small>
+              <strong id="output-language-label">English</strong>
+            </div>
+          </div>
+
+          <button class="record-orb" id="record-button" aria-label="Start recording">
+            <span id="record-icon">●</span>
+            <strong id="record-label">Tap to speak</strong>
+          </button>
+
+          <div class="quick-actions">
+            <button class="secondary-button" id="mock-button">Sample</button>
+            <button class="secondary-button" id="process-button">Analyze</button>
+            <button class="secondary-button" id="play-translation-button">Play</button>
+          </div>
+
+          <section class="simple-card">
+            <div class="card-title">
+              <h3>Translation</h3>
+              <span id="translation-confidence">Ready</span>
+            </div>
+            <p id="translation-output">Choose a language, connect audio, then record the patient.</p>
           </section>
 
-          <section class="panel">
-            <div class="panel-header">
-              <div>
-                <p class="eyebrow">Review and integration</p>
-                <h2>Submission Detail</h2>
-              </div>
-              <span class="status-pill" id="selected-status">No record</span>
+          <section class="simple-card compact">
+            <label for="transcript-input">Transcript</label>
+            <textarea id="transcript-input" rows="4" placeholder="Auto-detected patient speech appears here..."></textarea>
+          </section>
+        </section>
+
+        <section class="screen app-screen" id="triage-screen">
+          <header class="app-header">
+            <div>
+              <p class="kicker">AI draft</p>
+              <h2>Triage check</h2>
             </div>
-            <div id="submission-detail" class="detail-empty">Submit a triage draft from the field app.</div>
+            <span class="count-pill" id="question-count">0</span>
+          </header>
+
+          <section class="simple-card">
+            <div class="card-title">
+              <h3 id="chief-complaint-label">No complaint yet</h3>
+              <button class="tiny-button" id="fhir-button">FHIR</button>
+            </div>
+            <p id="ai-summary">Record or type patient speech to generate a triage draft.</p>
+          </section>
+
+          <section class="simple-card">
+            <div class="card-title">
+              <h3>Auto-filled intake</h3>
+              <span id="form-confidence">AI draft</span>
+            </div>
+            <label>
+              Chief complaint
+              <input id="chief-complaint-input" placeholder="Auto-filled by Gemma 4" />
+            </label>
+            <div class="filled-groups">
+              <div>
+                <p class="field-label">Red flags</p>
+                <div class="chip-list" id="red-flag-list"></div>
+              </div>
+              <div>
+                <p class="field-label">Symptoms</p>
+                <div class="filled-list" id="symptom-list"></div>
+              </div>
+              <div>
+                <p class="field-label">Meds / allergies / history</p>
+                <div class="filled-list" id="clinical-detail-list"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="triage-grid">
+            <label>
+              Age
+              <input id="patient-age" inputmode="numeric" placeholder="45" />
+            </label>
+            <label>
+              Pain
+              <input id="pain-score" inputmode="numeric" placeholder="0-10" />
+            </label>
+            <label>
+              Heart rate
+              <input id="heart-rate" inputmode="numeric" placeholder="88" />
+            </label>
+            <label>
+              O2
+              <input id="oxygen" inputmode="numeric" placeholder="98" />
+            </label>
+            <label>
+              BP
+              <input id="blood-pressure" placeholder="120/80" />
+            </label>
+            <label>
+              Temp
+              <input id="temperature" placeholder="37.0 C" />
+            </label>
+          </section>
+
+          <section class="simple-card">
+            <div class="card-title">
+              <h3>Guided triage</h3>
+              <span>WHO / ESI / START</span>
+            </div>
+            <div class="check-list" id="triage-checklist"></div>
+          </section>
+
+          <section class="simple-card">
+            <div class="card-title">
+              <h3>Follow-up</h3>
+              <span>Ask in patient language</span>
+            </div>
+            <div id="question-list" class="stack-list"></div>
+          </section>
+
+          <section class="simple-card">
+            <label class="checkbox-row">
+              <input id="consent-checkbox" type="checkbox" />
+              Consent captured
+            </label>
+            <label>
+              Notes
+              <textarea id="aide-notes" rows="3" placeholder="Aide notes..."></textarea>
+            </label>
+            <label>
+              Review
+              <select id="review-status">
+                <option value="ai_draft">AI draft</option>
+                <option value="aide_confirmed">Aide confirmed</option>
+                <option value="needs_clinician">Needs clinician</option>
+              </select>
+            </label>
+            <button class="primary-button" id="submit-button">Submit to clinic</button>
+          </section>
+        </section>
+
+        <section class="screen app-screen" id="clinic-screen">
+          <header class="app-header">
+            <div>
+              <p class="kicker">Clinic</p>
+              <h2>Sync queue</h2>
+            </div>
+            <button class="tiny-button" id="refresh-dashboard-button">Refresh</button>
+          </header>
+
+          <div id="queue-list" class="queue-list"></div>
+          <section class="simple-card">
+            <div class="card-title">
+              <h3>Selected record</h3>
+              <span id="selected-status">None</span>
+            </div>
+            <div id="submission-detail" class="detail-empty">Submit a triage draft from the visit.</div>
             <pre id="fhir-output" class="code-output" hidden></pre>
           </section>
-        </div>
-      </section>
-
-      <section class="view" id="architecture-view">
-        <section class="panel architecture-panel">
-          <p class="eyebrow">Implementation map</p>
-          <h2>How the prototype maps to the real product</h2>
-          <div class="architecture-flow">
-            <div>Glasses mic</div>
-            <div>Phone capture</div>
-            <div>OpenAI STT</div>
-            <div>Gemma 4 extraction</div>
-            <div>ElevenLabs TTS</div>
-            <div>Encrypted FHIR sync</div>
-          </div>
-          <div class="architecture-copy">
-            <p>The browser app simulates the phone UI and clinic dashboard. The Node server exposes provider endpoints for transcription, translation, speech, clinical extraction, FHIR conversion, and sync.</p>
-            <p>When API keys are missing, mock providers keep the demo working. Add <code>OPENAI_API_KEY</code>, <code>ELEVENLABS_API_KEY</code>, and <code>GEMMA_API_URL</code> to switch from demo mode toward real services.</p>
-          </div>
         </section>
+
+        <nav class="bottom-nav" id="bottom-nav" hidden>
+          <button class="nav-item is-active" data-screen="visit">
+            <span>●</span>
+            Visit
+          </button>
+          <button class="nav-item" data-screen="triage">
+            <span>◆</span>
+            Triage
+          </button>
+          <button class="nav-item" data-screen="clinic">
+            <span>■</span>
+            Clinic
+          </button>
+        </nav>
       </section>
     </main>
 
+    <audio id="speech-audio"></audio>
+
     <dialog id="modal">
       <div class="modal-header">
-        <h2 id="modal-title">FHIR Bundle</h2>
-        <button class="icon-button" id="close-modal-button" title="Close">x</button>
+        <h2 id="modal-title">Details</h2>
+        <button class="circle-button" id="close-modal-button" aria-label="Close">×</button>
       </div>
       <pre id="modal-content" class="code-output"></pre>
     </dialog>
