@@ -11,15 +11,17 @@
       <section class="phone-shell" aria-label="Care Bridge mobile app">
         <div class="status-bar">
           <span>9:41</span>
-          <span id="provider-status">Mock mode</span>
+          <span id="provider-status">Ready</span>
         </div>
 
         <section class="screen is-active" id="login-screen">
-          <div class="brand-mark">+</div>
+          <div class="login-brand">
+            <div class="brand-mark">+</div>
+            <h1>Care Bridge</h1>
+            <p>Medical Intake Assistant</p>
+          </div>
           <div class="welcome-copy">
-            <p class="kicker">Care Bridge</p>
-            <h1>Translate care, capture triage.</h1>
-            <p>Smart-glasses intake for clinics that cannot wait on perfect internet.</p>
+            <p>Discreet earpiece intake for clinics that cannot wait on perfect internet.</p>
           </div>
 
           <form class="login-form" id="login-form">
@@ -32,7 +34,9 @@
               <input id="clinic-code" autocomplete="organization" placeholder="RURAL-12" required />
             </label>
             <button class="primary-button" type="submit">Log in</button>
+            <button class="secondary-button" id="demo-login-button" type="button">Start demo as aide</button>
           </form>
+          <p class="app-version">v1.0.0 • Local-first medical intake</p>
         </section>
 
         <section class="screen" id="language-screen">
@@ -122,35 +126,44 @@
           <header class="screen-header">
             <button class="circle-button" data-back-to="language" aria-label="Back">‹</button>
             <div>
-              <p class="kicker">Step 2</p>
-              <h2>Connect glasses</h2>
+              <h2>Earpiece Setup</h2>
+              <p class="screen-subtitle">Connect and test your device</p>
             </div>
           </header>
 
-          <div class="device-card success">
-            <div>
-              <strong id="bluetooth-status">Glasses not connected</strong>
-              <p>Pair glasses in phone Bluetooth settings for audio. Use BLE here for button/battery signals when available.</p>
+          <div class="device-card hardware-card">
+            <div class="hardware-card-top">
+              <div class="hardware-title">
+                <span class="device-icon">B</span>
+                <strong>Bluetooth Earpiece</strong>
+              </div>
+              <span class="status-pill">Ready</span>
             </div>
+            <div class="battery-row">
+              <span class="battery-icon"></span>
+              <span>Mic capture and speaker playback.</span>
+            </div>
+            <p id="bluetooth-status">Earpiece not connected</p>
             <button class="secondary-button" id="bluetooth-button">Connect</button>
           </div>
 
-          <label>
-            Microphone
+          <label class="device-select-card">
+            <span class="select-title">Microphone Input</span>
             <select id="microphone-select"></select>
           </label>
-          <label>
-            Speaker
+          <label class="device-select-card">
+            <span class="select-title">Speaker Output</span>
             <select id="speaker-select"></select>
           </label>
 
-          <div class="device-card">
+          <div class="device-card voice-card">
             <div>
               <strong>Voice activity</strong>
-              <p id="voice-status">Waiting for microphone permission</p>
+              <p id="voice-status">Optional for live audio. The Sample demo works without microphone access.</p>
             </div>
             <div class="meter"><span id="voice-meter"></span></div>
           </div>
+          <button class="secondary-button full-button" id="voice-test-button">Test microphone</button>
 
           <button class="primary-button docked" id="enter-app-button">Start visit</button>
         </section>
@@ -182,8 +195,8 @@
           </button>
 
           <div class="quick-actions">
-            <button class="secondary-button" id="mock-button">Sample</button>
-            <button class="secondary-button" id="process-button">Analyze</button>
+            <button class="secondary-button demo-button" id="mock-button">Spanish chest pain demo</button>
+            <button class="secondary-button" id="process-button">Analyze with Gemma</button>
             <button class="secondary-button" id="play-translation-button">Play</button>
           </div>
 
@@ -204,10 +217,13 @@
         <section class="screen app-screen" id="triage-screen">
           <header class="app-header">
             <div>
-              <p class="kicker">AI draft</p>
-              <h2>Triage check</h2>
+              <h2>Triage Draft</h2>
+              <p class="screen-subtitle">AI-generated intake summary</p>
             </div>
-            <span class="count-pill" id="question-count">0</span>
+            <div class="triage-header-badges">
+              <span class="ai-draft-badge">AI Draft - Review Required</span>
+              <span class="count-pill" id="question-count">0</span>
+            </div>
           </header>
 
           <section class="simple-card">

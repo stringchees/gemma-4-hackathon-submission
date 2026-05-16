@@ -1,19 +1,21 @@
 :root {
   color-scheme: light;
-  --bg: #eef4f8;
-  --phone: #fbfcfd;
+  --bg: #eef3f8;
+  --phone: #f8fafc;
   --surface: #ffffff;
-  --surface-soft: #f1f7f3;
-  --ink: #1f2a32;
-  --muted: #65747e;
-  --line: #dce5ea;
-  --green: #39b54a;
-  --green-dark: #248c36;
-  --blue: #2c7be5;
-  --yellow: #f4b740;
-  --red: #e14b4b;
-  --gray: #8a97a1;
-  --shadow: 0 22px 60px rgba(42, 59, 75, 0.18);
+  --surface-soft: #f1f5f9;
+  --ink: #172033;
+  --muted: #607086;
+  --line: #d8e2ec;
+  --green: #10b981;
+  --green-dark: #0f8f68;
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --blue-soft: #dbeafe;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --gray: #94a3b8;
+  --shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
 }
 
 * {
@@ -27,9 +29,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(57, 181, 74, 0.16), transparent 32%),
-    linear-gradient(135deg, #eef4f8, #f8fbfd);
+  background: linear-gradient(135deg, #e8eef6, #f8fbff);
   color: var(--ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -49,37 +49,53 @@ button {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: 18px;
 }
 
 .phone-shell {
   position: relative;
-  width: min(430px, 100%);
-  height: min(900px, calc(100vh - 32px));
+  width: min(399px, 100%);
+  height: min(836px, calc(100vh - 24px));
   min-height: 720px;
   overflow: hidden;
   background: var(--phone);
-  border: 1px solid rgba(20, 34, 45, 0.08);
-  border-radius: 8px;
+  border: 12px solid #05070d;
+  border-radius: 46px;
   box-shadow: var(--shadow);
 }
 
+.phone-shell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 5;
+  width: 148px;
+  height: 26px;
+  border-radius: 0 0 24px 24px;
+  background: #05070d;
+  transform: translateX(-50%);
+}
+
 .status-bar {
-  height: 34px;
+  height: 44px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 0 22px;
-  color: var(--muted);
+  padding: 8px 26px 0;
+  color: #172033;
   font-size: 12px;
   font-weight: 800;
+  background: #fff;
 }
 
 .screen {
+  position: relative;
   display: none;
-  height: calc(100% - 34px);
+  height: calc(100% - 44px);
   overflow-y: auto;
-  padding: 24px 22px 96px;
+  padding: 22px 20px 96px;
+  background: #fff;
 }
 
 .screen.is-active {
@@ -98,9 +114,8 @@ p {
 }
 
 h1 {
-  max-width: 340px;
-  font-size: 36px;
-  line-height: 1.03;
+  font-size: 25px;
+  line-height: 1.15;
 }
 
 h2 {
@@ -115,7 +130,7 @@ h3 {
 
 .kicker {
   margin-bottom: 8px;
-  color: var(--green-dark);
+  color: var(--blue);
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0;
@@ -123,17 +138,30 @@ h3 {
 }
 
 .brand-mark {
-  width: 74px;
-  height: 74px;
+  width: 64px;
+  height: 64px;
   display: grid;
   place-items: center;
-  margin: 34px 0 28px;
-  background: var(--green);
+  margin: 0 auto 14px;
+  background: var(--blue);
   color: #fff;
-  border-radius: 8px;
+  border-radius: 16px;
   box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.12);
-  font-size: 44px;
+  font-size: 38px;
   font-weight: 900;
+}
+
+.login-brand {
+  display: grid;
+  justify-items: center;
+  padding: 52px 0 30px;
+  text-align: center;
+}
+
+.login-brand p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 .welcome-copy p:last-child,
@@ -153,7 +181,14 @@ h3 {
 }
 
 .login-form {
-  margin-top: 36px;
+  margin-top: 28px;
+}
+
+.app-version {
+  margin-top: 26px;
+  color: #94a3b8;
+  font-size: 12px;
+  text-align: center;
 }
 
 label {
@@ -177,7 +212,7 @@ textarea {
 
 input,
 select {
-  min-height: 48px;
+  min-height: 44px;
   padding: 0 14px;
 }
 
@@ -191,8 +226,8 @@ input:focus,
 select:focus,
 textarea:focus,
 button:focus-visible {
-  border-color: var(--green);
-  box-shadow: 0 0 0 4px rgba(57, 181, 74, 0.18);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16);
 }
 
 .primary-button,
@@ -210,13 +245,13 @@ button:focus-visible {
   width: 100%;
   padding: 0 18px;
   border-radius: 8px;
-  background: var(--green);
+  background: var(--blue);
   color: #fff;
   box-shadow: inset 0 -5px 0 rgba(0, 0, 0, 0.13);
 }
 
 .primary-button:hover {
-  background: var(--green-dark);
+  background: var(--blue-dark);
 }
 
 .secondary-button,
@@ -229,6 +264,23 @@ button:focus-visible {
   color: var(--ink);
 }
 
+.secondary-button:hover,
+.tiny-button:hover {
+  border-color: #bfd0e5;
+  background: #f8fbff;
+}
+
+.demo-button {
+  border-color: #f6d28c;
+  background: #fff8e8;
+  color: #7a4a00;
+}
+
+.full-button {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
 .tiny-button {
   min-height: 34px;
   padding: 0 11px;
@@ -236,8 +288,6 @@ button:focus-visible {
 }
 
 .docked {
-  position: sticky;
-  bottom: 0;
   margin-top: 18px;
 }
 
@@ -264,11 +314,20 @@ button:focus-visible {
 
 .screen-header,
 .app-header {
-  margin-bottom: 22px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
 }
 
 .screen-header {
   justify-content: flex-start;
+}
+
+.screen-subtitle {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .language-card {
@@ -295,8 +354,8 @@ button:focus-visible {
 }
 
 .language-card.is-selected {
-  border-color: var(--green);
-  background: #effaf1;
+  border-color: var(--blue);
+  background: var(--blue-soft);
 }
 
 .language-list {
@@ -329,15 +388,98 @@ button:focus-visible {
 .device-card,
 .simple-card {
   margin-bottom: 14px;
-  padding: 16px;
-  border: 2px solid var(--line);
+  padding: 14px;
+  border: 1px solid var(--line);
   border-radius: 8px;
   background: #fff;
 }
 
 .device-card.success {
-  border-color: #cdeccf;
-  background: #f2fbf3;
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.hardware-card {
+  display: block;
+}
+
+.hardware-card-top,
+.hardware-title,
+.battery-row {
+  display: flex;
+  align-items: center;
+}
+
+.hardware-card-top {
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.hardware-title,
+.battery-row {
+  gap: 8px;
+}
+
+.device-icon {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: #d1fae5;
+  color: #047857;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.battery-row {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.battery-icon {
+  width: 20px;
+  height: 10px;
+  border: 2px solid #94a3b8;
+  border-radius: 3px;
+  box-shadow: inset 12px 0 0 var(--green);
+}
+
+.device-select-card {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.select-title {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.voice-card .meter {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.voice-card {
+  display: block;
 }
 
 .meter {
@@ -359,9 +501,9 @@ button:focus-visible {
 .language-row {
   margin-bottom: 18px;
   padding: 14px 16px;
-  border: 2px solid #d7ead9;
+  border: 2px solid #bfdbfe;
   border-radius: 8px;
-  background: #f1faf2;
+  background: #eff6ff;
 }
 
 .language-row small {
@@ -381,7 +523,7 @@ button:focus-visible {
   margin-bottom: 14px;
   border: 0;
   border-radius: 8px;
-  background: var(--green);
+  background: var(--blue);
   color: #fff;
   box-shadow: inset 0 -8px 0 rgba(0, 0, 0, 0.14);
 }
@@ -401,9 +543,13 @@ button:focus-visible {
 
 .quick-actions {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 14px;
+}
+
+.quick-actions .demo-button {
+  grid-column: 1 / -1;
 }
 
 .simple-card.compact {
@@ -416,7 +562,8 @@ button:focus-visible {
 
 .card-title span,
 .count-pill,
-.urgency {
+.urgency,
+.ai-draft-badge {
   display: inline-flex;
   align-items: center;
   min-height: 28px;
@@ -426,6 +573,17 @@ button:focus-visible {
   color: var(--muted);
   font-size: 12px;
   font-weight: 900;
+}
+
+.ai-draft-badge {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.triage-header-badges {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
 }
 
 .urgency {
@@ -600,8 +758,8 @@ button:focus-visible {
 }
 
 .nav-item.is-active {
-  background: #effaf1;
-  color: var(--green-dark);
+  background: var(--blue-soft);
+  color: var(--blue-dark);
 }
 
 .queue-card {
@@ -667,5 +825,9 @@ dialog::backdrop {
     min-height: 100vh;
     border: 0;
     border-radius: 0;
+  }
+
+  .phone-shell::before {
+    display: none;
   }
 }

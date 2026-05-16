@@ -16,7 +16,7 @@ const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 const GEMMA_API_URL = process.env.GEMMA_API_URL;
 const GEMMA_API_KEY = process.env.GEMMA_API_KEY;
 const GEMMA_PROVIDER = process.env.GEMMA_PROVIDER || (GEMMA_API_URL ? "openai-compatible" : "ollama");
-const GEMMA_MODEL = process.env.GEMMA_MODEL || "gemma4:e4b";
+const GEMMA_MODEL = process.env.GEMMA_MODEL || "gemma4:e2b";
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://127.0.0.1:11434/api/chat";
 const GEMMA_TIMEOUT_MS = Number(process.env.GEMMA_TIMEOUT_MS || 6000);
 const GEMMA_TRANSLATION_TIMEOUT_MS = Number(process.env.GEMMA_TRANSLATION_TIMEOUT_MS || 3000);
@@ -694,7 +694,7 @@ async function translateWithGemma({ text, sourceLanguage, targetLanguage }) {
 }
 
 async function checkGemmaAvailable() {
-  if (process.env.GEMMA_PROVIDER === "mock") return false;
+  if (GEMMA_PROVIDER === "mock") return false;
   if (GEMMA_PROVIDER === "openai-compatible") return Boolean(GEMMA_API_URL);
   try {
     const controller = new AbortController();
@@ -962,7 +962,7 @@ async function translateText(req, res) {
 
 async function extractClinical(req, res) {
   const body = await readJson(req);
-  if (process.env.GEMMA_PROVIDER === "mock") {
+  if (GEMMA_PROVIDER === "mock") {
     return sendJson(res, 200, {
       provider: "mock-gemma4",
       submission: mockExtract(body)
@@ -988,7 +988,7 @@ async function extractClinical(req, res) {
 
 async function synthesizeSpeech(req, res) {
   const body = await readJson(req);
-  const { text = "", voiceId = process.env.ELEVENLABS_VOICE_ID || "21m00Tcm4TlvDq8ikWAM" } = body;
+  const { text = "", voiceId = process.env.ELEVENLABS_VOICE_ID || "hpp4J3VqNfWAUOO0d1Us" } = body;
   if (!ELEVENLABS_API_KEY || !text) {
     return sendJson(res, 200, {
       provider: "browser",
@@ -1015,7 +1015,12 @@ async function synthesizeSpeech(req, res) {
   });
   if (!response.ok) {
     const payload = await response.text();
-    return sendJson(res, response.status, { error: payload });
+    return sendJson(res, 200, {
+      provider: "browser-fallback",
+      useBrowserSpeech: true,
+      text,
+      elevenLabsError: payload
+    });
   }
   const buffer = await response.arrayBuffer();
   return sendAudio(res, 200, buffer, "audio/mpeg");

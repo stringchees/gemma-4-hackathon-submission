@@ -37,6 +37,7 @@ const els = {
   },
   providerStatus: document.querySelector("#provider-status"),
   loginForm: document.querySelector("#login-form"),
+  demoLoginButton: document.querySelector("#demo-login-button"),
   aideName: document.querySelector("#aide-name"),
   clinicCode: document.querySelector("#clinic-code"),
   languageList: document.querySelector("#language-list"),
@@ -45,6 +46,7 @@ const els = {
   bluetoothStatus: document.querySelector("#bluetooth-status"),
   microphoneSelect: document.querySelector("#microphone-select"),
   speakerSelect: document.querySelector("#speaker-select"),
+  voiceTestButton: document.querySelector("#voice-test-button"),
   voiceStatus: document.querySelector("#voice-status"),
   voiceMeter: document.querySelector("#voice-meter"),
   enterAppButton: document.querySelector("#enter-app-button"),
@@ -183,7 +185,7 @@ async function checkProviders() {
   if (providers.openai) enabled.push("OpenAI audio");
   if (providers.elevenlabs) enabled.push("ElevenLabs voice");
   if (providers.clinicSync) enabled.push("Clinic sync");
-  els.providerStatus.textContent = enabled.length ? `Live: ${enabled.join(", ")}` : "Mock mode";
+  els.providerStatus.textContent = enabled.length ? `Live: ${enabled.join(", ")}` : "Ready";
 }
 
 async function enumerateAudioDevices() {
@@ -214,7 +216,7 @@ function fillDeviceSelect(select, devices, fallbackLabel) {
 
 async function connectBluetooth() {
   if (!navigator.bluetooth) {
-    showModal("Bluetooth", "This browser does not expose Web Bluetooth. Pair the glasses in phone settings, then choose them as microphone/speaker here.");
+    showModal("Bluetooth", "This browser does not expose Web Bluetooth. Pair the earpiece in phone settings, then choose it as microphone/speaker here.");
     return;
   }
   try {
@@ -222,9 +224,9 @@ async function connectBluetooth() {
       acceptAllDevices: true,
       optionalServices: ["battery_service", "device_information"]
     });
-    els.bluetoothStatus.textContent = `${state.bluetoothDevice.name || "Glasses"} connected`;
+    els.bluetoothStatus.textContent = `${state.bluetoothDevice.name || "Earpiece"} connected`;
     state.bluetoothDevice.addEventListener("gattserverdisconnected", () => {
-      els.bluetoothStatus.textContent = "Glasses disconnected";
+      els.bluetoothStatus.textContent = "Earpiece disconnected";
     });
   } catch (error) {
     showModal("Bluetooth", error.message);
@@ -285,7 +287,7 @@ async function startRecording() {
   els.recordButton.classList.add("recording");
   els.recordLabel.textContent = "Listening...";
   els.recordIcon.textContent = "■";
-  els.visitTitle.textContent = "Listening through glasses";
+  els.visitTitle.textContent = "Listening through earpiece";
 }
 
 function stopRecording() {
@@ -847,6 +849,17 @@ function bindEvents() {
     saveDraft();
     showScreen("language");
   });
+  els.demoLoginButton.addEventListener("click", () => {
+    els.aideName.value = "Demo Aide";
+    els.clinicCode.value = "FIELD-12";
+    state.aide = {
+      name: els.aideName.value,
+      clinic: els.clinicCode.value
+    };
+    setOutputLanguage("English");
+    saveDraft();
+    showScreen("language");
+  });
   document.querySelectorAll("[data-back-to]").forEach((button) => {
     button.addEventListener("click", () => showScreen(button.dataset.backTo));
   });
@@ -856,10 +869,10 @@ function bindEvents() {
   });
   els.startSetupButton.addEventListener("click", async () => {
     showScreen("setup");
-    await startVoiceMeter();
+    await enumerateAudioDevices();
   });
   els.bluetoothButton.addEventListener("click", connectBluetooth);
-  els.microphoneSelect.addEventListener("change", startVoiceMeter);
+  els.voiceTestButton.addEventListener("click", startVoiceMeter);
   els.enterAppButton.addEventListener("click", () => showScreen("visit"));
   els.navItems.forEach((item) => item.addEventListener("click", () => showScreen(item.dataset.screen)));
   els.recordButton.addEventListener("click", () => {
