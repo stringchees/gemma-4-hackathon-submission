@@ -35,7 +35,6 @@ const els = {
     triage: document.querySelector("#triage-screen"),
     clinic: document.querySelector("#clinic-screen")
   },
-  providerStatus: document.querySelector("#provider-status"),
   loginForm: document.querySelector("#login-form"),
   demoLoginButton: document.querySelector("#demo-login-button"),
   aideName: document.querySelector("#aide-name"),
@@ -178,14 +177,6 @@ async function apiJson(path, body) {
 async function checkProviders() {
   const response = await fetch("/api/health");
   state.providerHealth = await response.json();
-  const providers = state.providerHealth.providers;
-  const enabled = [];
-  if (providers.gemma) enabled.push(`Gemma 4 ${providers.gemmaModel || ""}`.trim());
-  else if (providers.gemmaConfigured) enabled.push("Gemma 4 ready when local model starts");
-  if (providers.openai) enabled.push("OpenAI audio");
-  if (providers.elevenlabs) enabled.push("ElevenLabs voice");
-  if (providers.clinicSync) enabled.push("Clinic sync");
-  els.providerStatus.textContent = enabled.length ? `Live: ${enabled.join(", ")}` : "Ready";
 }
 
 async function enumerateAudioDevices() {
@@ -311,7 +302,6 @@ async function transcribeRecording() {
     if (!response.ok) throw new Error(payload.error || "Transcription failed");
     if (!payload.text?.trim()) throw new Error("ElevenLabs returned an empty transcript. Try recording a little longer and closer to the microphone.");
     applyDetectedLanguage(payload.languageName || payload.language || "Auto", payload.languageConfidence || 0.8);
-    els.providerStatus.textContent = payload.provider === "elevenlabs-scribe" ? `Live: ElevenLabs ${payload.model || "Scribe"}` : `Live: ${payload.provider || "transcription"}`;
     els.transcriptInput.value = payload.text;
     await processTranscript();
   } catch (error) {
@@ -427,11 +417,6 @@ async function processTranscript() {
       targetLanguage: state.outputLanguage,
       existingForm: collectSubmissionFromForm()
     });
-    if (extraction.provider?.startsWith("gemma4")) {
-      els.providerStatus.textContent = `Live: ${extraction.model || "Gemma 4"}`;
-    } else if (extraction.fallbackReason) {
-      els.providerStatus.textContent = "Triage filled; Gemma slow";
-    }
     state.currentSubmission = normalizeSubmission(extraction.submission);
     renderSubmission();
     showScreen("triage");

@@ -81,7 +81,7 @@ button {
   height: 44px;
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 8px 26px 0;
   color: #172033;
   font-size: 12px;
